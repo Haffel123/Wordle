@@ -204,31 +204,27 @@ function colorBoxes() {
                         box.style.color = "#ffffff";
                         temp_duplicates[box_char]--;
                     } else {
-                        if (color_mode == "dark") {
-                            box.style.backgroundColor = "#3a3a3c";
-                            box.style.borderColor = "#3a3a3c";
-                            box.style.color = "#ffffff";
-                        } else {
-                            box.style.backgroundColor = "#787c7f";
-                            box.style.borderColor = "#787c7f";
-                            box.style.color = "#ffffff";
-                        };
+                        changeBoxesColors()
                     };
                     
                 } else if (box_char != current_letter) {
-                    if (color_mode == "dark") {
-                        box.style.backgroundColor = "#3a3a3c";
-                        box.style.borderColor = "#3a3a3c";
-                        box.style.color = "#ffffff";
-                    } else if (color_mode == "light") {
-                        box.style.backgroundColor = "#787c7f";
-                        box.style.borderColor = "#787c7f";
-                        box.style.color = "#ffffff";
-                    };
+                    changeBoxesColors()
                 };
 
             }, i * 125);
         }, i * 250);
+    };
+
+    function changeColorsBoxes() {
+        if (color_mode == "dark") {
+            box.style.backgroundColor = "#3a3a3c";
+            box.style.borderColor = "#3a3a3c";
+            box.style.color = "#ffffff";
+        } else {
+            box.style.backgroundColor = "#787c7f";
+            box.style.borderColor = "#787c7f";
+            box.style.color = "#ffffff";
+        };
     };
 
     setTimeout(() => {
