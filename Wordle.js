@@ -172,7 +172,7 @@ function colorBoxes() {
         return;
     };
 
-    const totalAnimationTime = 1900;
+    const totalAnimationTime = 1550;
     isAnimating = true;
     let correct_boxes = 0;
 
@@ -210,8 +210,7 @@ function colorBoxes() {
                 } else if (box_char != current_letter) {
                     changeBoxesColors(box)
                 };
-
-            }, i * 125);
+            }, 250);
         }, i * 250);
     };
 
