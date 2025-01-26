@@ -215,7 +215,7 @@ function colorBoxes() {
         }, i * 250);
     };
 
-    function changeColorsBoxes() {
+    function changeBoxesColors() {
         if (color_mode == "dark") {
             box.style.backgroundColor = "#3a3a3c";
             box.style.borderColor = "#3a3a3c";
