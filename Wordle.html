@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Wordle.css">
+    <title>Wordle</title>
+</head>
+<body>
+    <button class="switchColorBtn" onclick="switchColorModes(); this.blur()"></button>
+    <button class="newGameBtn" onclick="initializeNewGame(); this.blur();">New Game</button>
+    <div class="msgBox invalidMsgBox">Invalid Word</div>
+    <div class="msgBox loseMsgBox"></div>
+    <div class="msgBox winMsgBox">You Win!</div>
+    <div class="msgBox newGameMsgBox">New Game Started!</div>
+    
+    <div class="allBoxes">
+        <div id="boxes1">
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div><br>
+        </div>
+
+        <div id="boxes2">
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div><br>
+        </div>
+
+        <div id="boxes3">
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div><br>
+        </div>
+
+        <div id="boxes4">
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div><br>
+        </div>
+
+        <div id="boxes5">
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div><br>
+        </div>
+
+        <div id="boxes6">
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div>
+            <div id="displayBox" class="displayBox"></div><br>
+        </div>
+    </div>
+
+    <script src="Wordle.js"></script>
+</body>
+</html>
