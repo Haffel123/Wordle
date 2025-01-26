@@ -76,8 +76,7 @@ function initializeNewGame() {
     
         document.removeEventListener("keydown", handleKeyPress);
         document.addEventListener("keydown", handleKeyPress);
-    }
-
+    };
 };
 
 async function loadWords() {
@@ -173,7 +172,7 @@ function colorBoxes() {
         return;
     };
 
-    const totalAnimationTime = (current_line.children.length - 1) * 250 + 105;
+    const totalAnimationTime = 1880;
     isAnimating = true;
     let correct_boxes = 0;
 
@@ -198,32 +197,7 @@ function colorBoxes() {
                     if (temp_duplicates[box_char] != 0) {
                         temp_duplicates[box_char]--;
                     };
-                };
-                if (correct_boxes == 6) {
-                    document.removeEventListener("keydown", handleKeyPress);
-                    win_box = document.getElementsByClassName("winMsgBox")[0];
-                    win_box.classList.remove("animateMsgBox");
-                    void win_box.offsetWidth;
-                    win_box.classList.add("animateMsgBox");
-                    return;
-                };
-            }, i* 105);
-        }, i * 250);
-    };
-
-    for (let i=0; i < current_line.children.length; i++) {
-        let box = current_line.children[i];
-        let box_char = box.textContent;
-        let current_letter = guess_word.charAt(i);
-
-        setTimeout(() => {
-            box.classList.remove("animateBoxRotate");
-            void box.offsetWidth;
-            box.classList.add("animateBoxRotate");
-            void box.offsetWidth;
-
-            setTimeout (() => {
-                if (box_char != current_letter && guess_word.includes(box_char)) {
+                } else if (box_char != current_letter && guess_word.includes(box_char)) {
                     if (temp_duplicates[box_char] > 0) {
                         box.style.backgroundColor = "#b79b42";
                         box.style.borderColor = "#b79b42";
@@ -252,13 +226,24 @@ function colorBoxes() {
                         box.style.color = "#ffffff";
                     };
                 };
-            }, i * 105)
+
+            }, i * 125);
         }, i * 250);
     };
 
     setTimeout(() => {
         isAnimating = false;
-        if (current_line_idx + 1 != 7) {
+        
+        console.log(correct_boxes)
+        if (correct_boxes == 6) {
+            document.removeEventListener("keydown", handleKeyPress);
+            win_box = document.getElementsByClassName("winMsgBox")[0];
+            win_box.classList.remove("animateMsgBox");
+            void win_box.offsetWidth;
+            win_box.classList.add("animateMsgBox");
+            return;
+
+        } else if (current_line_idx + 1 != 7) {
             temp_duplicates = {...duplicates};
             current_line_idx++;
             current_line = document.getElementById(`boxes${current_line_idx}`);
@@ -271,13 +256,14 @@ function colorBoxes() {
                     current_line.children[i].style.borderColor = "#3a3a3c";
                 };
             };
+
         } else {
             current_line_idx++;
             try {
                 current_line = document.getElementById(`boxes${current_line_idx}`);
             } catch (err) {
                 
-            }
+            };
             
             lose_box = document.getElementsByClassName("loseMsgBox")[0];
             lose_box.textContent = `You lose! The word was: ${guess_word}`;
@@ -286,7 +272,6 @@ function colorBoxes() {
             lose_box.classList.add("animateMsgBox");
         };
     }, totalAnimationTime);
-
 };
 
 function handleKeyPress(event) {
