@@ -204,18 +204,18 @@ function colorBoxes() {
                         box.style.color = "#ffffff";
                         temp_duplicates[box_char]--;
                     } else {
-                        changeBoxesColors()
+                        changeBoxesColors(box)
                     };
                     
                 } else if (box_char != current_letter) {
-                    changeBoxesColors()
+                    changeBoxesColors(box)
                 };
 
             }, i * 125);
         }, i * 250);
     };
 
-    function changeBoxesColors() {
+    function changeBoxesColors(box) {
         if (color_mode == "dark") {
             box.style.backgroundColor = "#3a3a3c";
             box.style.borderColor = "#3a3a3c";
