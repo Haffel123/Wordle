@@ -22,59 +22,62 @@ function setBoardColor() {
 }
 
 function initializeNewGame() {
-    new_game_box = document.getElementsByClassName("newGameMsgBox")[0];
-    new_game_box.classList.remove("animateMsgBox");
-    void new_game_box.offsetWidth;
-    new_game_box.classList.add("animateMsgBox");
-
-    if (color_mode == "dark") {
-        document.getElementsByClassName("switchColorBtn")[0].textContent = "Blind yourself";
-        switchColorBtnHover.backgroundColor = "#ffd900";
-        switchColorBtnActiveHover.backgroundColor = "#b69b04";
-    } else {
-        document.getElementsByClassName("switchColorBtn")[0].textContent = "Be Normal";
-        switchColorBtnHover.backgroundColor = "#06af60";
-        switchColorBtnActiveHover.backgroundColor = "#036b3b"
-    };
-
-    for (i=1; i<7; i++) {
-        for (j=0; j<5; j++) {
-            current_box = document.getElementById(`boxes${i}`).children[j];
-            current_box.textContent = "";
-            if (color_mode == "dark") {
-                current_box.style.backgroundColor = "#121213";
-                current_box.style.borderColor = "#646164";
-                current_box.color = "#ffffff";
-            } else {
-                current_box.style.backgroundColor = "#ffffff";
-                current_box.style.borderColor = "#787c7f";
-                current_box.style.color = "#000000";
+    if (!isAnimating) {
+        new_game_box = document.getElementsByClassName("newGameMsgBox")[0];
+        new_game_box.classList.remove("animateMsgBox");
+        void new_game_box.offsetWidth;
+        new_game_box.classList.add("animateMsgBox");
+    
+        if (color_mode == "dark") {
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Blind yourself";
+            switchColorBtnHover.backgroundColor = "#ffd900";
+            switchColorBtnActiveHover.backgroundColor = "#b69b04";
+        } else {
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Be Normal";
+            switchColorBtnHover.backgroundColor = "#06af60";
+            switchColorBtnActiveHover.backgroundColor = "#036b3b"
+        };
+    
+        for (i=1; i<7; i++) {
+            for (j=0; j<5; j++) {
+                current_box = document.getElementById(`boxes${i}`).children[j];
+                current_box.textContent = "";
+                if (color_mode == "dark") {
+                    current_box.style.backgroundColor = "#121213";
+                    current_box.style.borderColor = "#646164";
+                    current_box.color = "#ffffff";
+                } else {
+                    current_box.style.backgroundColor = "#ffffff";
+                    current_box.style.borderColor = "#787c7f";
+                    current_box.style.color = "#000000";
+                };
             };
         };
-    };
-
-    current_line_idx = 1;
-    current_box_idx = 0;
-    current_line = document.getElementById(`boxes${current_line_idx}`);
-    current_box = current_line.children[current_box_idx];
-
-    for (i=0; i<5; i++) {
-        if (color_mode == "dark") {
-            current_line.children[i].style.borderColor = "#a5a7a8";
-        } else {
-            current_line.children[i].style.borderColor = "#3a3a3c";
+    
+        current_line_idx = 1;
+        current_box_idx = 0;
+        current_line = document.getElementById(`boxes${current_line_idx}`);
+        current_box = current_line.children[current_box_idx];
+    
+        for (i=0; i<5; i++) {
+            if (color_mode == "dark") {
+                current_line.children[i].style.borderColor = "#a5a7a8";
+            } else {
+                current_line.children[i].style.borderColor = "#3a3a3c";
+            };
         };
-    };
+    
+        const randomIndex = Math.floor(Math.random() * word_array.length);
+        guess_word = word_array[randomIndex].toUpperCase();
+        console.log(guess_word);
+    
+        getDuplicates();
+        temp_duplicates = {...duplicates};
+    
+        document.removeEventListener("keydown", handleKeyPress);
+        document.addEventListener("keydown", handleKeyPress);
+    }
 
-    const randomIndex = Math.floor(Math.random() * word_array.length);
-    guess_word = word_array[randomIndex].toUpperCase();
-    console.log(guess_word);
-
-    getDuplicates();
-    temp_duplicates = {...duplicates};
-
-    document.removeEventListener("keydown", handleKeyPress);
-    document.addEventListener("keydown", handleKeyPress);
 };
 
 async function loadWords() {
