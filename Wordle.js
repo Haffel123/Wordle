@@ -172,7 +172,7 @@ function colorBoxes() {
         return;
     };
 
-    const totalAnimationTime = 1880;
+    const totalAnimationTime = 1900;
     isAnimating = true;
     let correct_boxes = 0;
 
