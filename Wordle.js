@@ -230,7 +230,6 @@ function colorBoxes() {
     setTimeout(() => {
         isAnimating = false;
         
-        console.log(correct_boxes)
         if (correct_boxes == 6) {
             document.removeEventListener("keydown", handleKeyPress);
             win_box = document.getElementsByClassName("winMsgBox")[0];
