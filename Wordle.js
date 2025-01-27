@@ -174,7 +174,21 @@ function colorBoxes() {
 
     const totalAnimationTime = 1550;
     isAnimating = true;
-    let correct_boxes = 0;
+    let correct_boxes = [];
+
+    for (let i=0; i < current_line.children.length; i++) {
+        let box = current_line.children[i];
+        let box_char = box.textContent;
+        let current_letter = guess_word.charAt(i);
+
+        if (box_char == current_letter) {
+            correct_boxes.push(box);
+
+            if (temp_duplicates[box_char] != 0) {
+                temp_duplicates[box_char]--;
+            };
+        };
+    };
 
     for (let i=0; i < current_line.children.length; i++) {
         let box = current_line.children[i];
@@ -188,27 +202,24 @@ function colorBoxes() {
             void box.offsetWidth;
 
             setTimeout(() => {
-                if (box_char == current_letter) {
-                    box.style.backgroundColor = "#528c4f";
-                    box.style.borderColor = "#528c4f";
-                    box.style.color = "#ffffff";
-                    correct_boxes++;
-                    
-                    if (temp_duplicates[box_char] != 0) {
-                        temp_duplicates[box_char]--;
-                    };
-                } else if (box_char != current_letter && guess_word.includes(box_char)) {
+                if (box_char != current_letter && guess_word.includes(box_char)) {
                     if (temp_duplicates[box_char] > 0) {
                         box.style.backgroundColor = "#b79b42";
                         box.style.borderColor = "#b79b42";
                         box.style.color = "#ffffff";
                         temp_duplicates[box_char]--;
                     } else {
-                        changeBoxesColors(box)
+                        changeBoxesColors(box);
                     };
                     
                 } else if (box_char != current_letter) {
-                    changeBoxesColors(box)
+                    changeBoxesColors(box);
+
+                } else if (box_char == current_letter) {
+                    box.style.backgroundColor = "#528c4f";
+                    box.style.borderColor = "#528c4f";
+                    box.style.color = "#ffffff";
+                    correct_boxes++;
                 };
             }, 250);
         }, i * 250);
@@ -229,7 +240,7 @@ function colorBoxes() {
     setTimeout(() => {
         isAnimating = false;
         
-        if (correct_boxes == 6) {
+        if (correct_boxes.length == 6) {
             document.removeEventListener("keydown", handleKeyPress);
             win_box = document.getElementsByClassName("winMsgBox")[0];
             win_box.classList.remove("animateMsgBox");
