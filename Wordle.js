@@ -29,13 +29,13 @@ function initializeNewGame() {
         new_game_box.classList.add("animateMsgBox");
     
         if (color_mode == "dark") {
-            document.getElementsByClassName("switchColorBtn")[0].textContent = "Blind yourself";
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode";
             switchColorBtnHover.backgroundColor = "#ffd900";
             switchColorBtnActiveHover.backgroundColor = "#b69b04";
         } else {
-            document.getElementsByClassName("switchColorBtn")[0].textContent = "Be Normal";
-            switchColorBtnHover.backgroundColor = "#06af60";
-            switchColorBtnActiveHover.backgroundColor = "#036b3b"
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Dark Mode";
+            switchColorBtnHover.backgroundColor = "#000000";
+            switchColorBtnActiveHover.backgroundColor = "#2b2b2b";
         };
     
         for (i=1; i<7; i++) {
@@ -103,9 +103,9 @@ function switchColorModes() {
 
     if (!isAnimating) {
         if (color_mode == "dark") {
-            document.getElementsByClassName("switchColorBtn")[0].textContent = "Be Normal";
-            switchColorBtnHover.backgroundColor = "#06af60";
-            switchColorBtnActiveHover.backgroundColor = "#036b3b"
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Dark Mode";
+            switchColorBtnHover.backgroundColor = "#000000";
+            switchColorBtnActiveHover.backgroundColor = "#2b2b2b";
             document.body.style.backgroundColor = "#ffffff";
             boxes.forEach(box => {
                 BgColor = rgbToHex(box.style.backgroundColor);
@@ -122,7 +122,7 @@ function switchColorModes() {
             });
             color_mode = "light";
         } else {
-            document.getElementsByClassName("switchColorBtn")[0].textContent = "Blind yourself"
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode"
             switchColorBtnHover.backgroundColor = "#ffd900";
             switchColorBtnActiveHover.backgroundColor = "#b69b04";
             document.body.style.backgroundColor = "#121213";
