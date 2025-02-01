@@ -12,6 +12,7 @@ let switchColorBtnHover = null;
 let switchColorBtnActiveHover = null;
 isAnimating = false;
 const styleSheets = document.styleSheets;
+const socket = io();
 
 function setBoardColor() {
     if (color_mode == "dark") {
@@ -122,7 +123,7 @@ function switchColorModes() {
             });
             color_mode = "light";
         } else {
-            document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode"
+            document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode";
             switchColorBtnHover.backgroundColor = "#ffd900";
             switchColorBtnActiveHover.backgroundColor = "#b69b04";
             document.body.style.backgroundColor = "#121213";
@@ -341,3 +342,11 @@ function getStyleSheet() {
 setBoardColor();
 getStyleSheet();
 loadWords();
+
+socket.on("updateScore", (players) => {
+    console.log(players[socket.id]["score"]);
+});
+
+socket.on("updateGuessWord", (players) => {
+    console.log(players[socket.id]["guess_word"])
+})
