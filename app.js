@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 
 const players  = {};
 
+let word_array = [];
 let word_set = new Set();
 
 async function loadWords() {
@@ -43,17 +44,17 @@ io.on("connection", (socket) => {
         guess_word: "",
     };
     
-    // socket.emit if only needed for the player that joined
+    // socket.emit if only needed for the player that requested
     // io.emit for all
     socket.emit("updateScore", players);
-    socket.emit("updateGuessWord", players);
 
     socket.on("getGuessWord", () => {
-        socket.emit("guessWord", guess_word);
+        socket.emit("guessWord", players[socket.id].guess_word);
     });
 
     socket.on("generateGuessWord", () => {
-        players[socket.id]["guess_word"] = generateGuessWord();
+        players[socket.id].guess_word = generateGuessWord();
+        console.log(players)
         console.log(players[socket.id]["guess_word"])
     });
 
