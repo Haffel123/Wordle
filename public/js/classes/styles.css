@@ -17,6 +17,13 @@ Button {
     z-index: 10;
 }
 
+.score {
+    padding: 0%;
+    color: white;
+    font-size: 40px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
 .newGameBtn {
     left: 25px;
 }

@@ -7,12 +7,14 @@
     <title>Wordle</title>
 </head>
 <body>
+    <div id="highscore" class="score"> Top Score: 0 </div>
+    <div id="score" class="score"> Score: 0 </div>
     <button class="switchColorBtn" onclick="switchColorModes(); this.blur()"></button>
-    <button class="newGameBtn" onclick="initializeNewGame(); this.blur();">New Game</button>
-    <div class="msgBox invalidMsgBox">Invalid Word</div>
+    <button class="newGameBtn" onclick="initializeNewGame(); this.blur();"> New Game </button>
+    <div class="msgBox invalidMsgBox"> Invalid Word </div>
     <div class="msgBox loseMsgBox"></div>
-    <div class="msgBox winMsgBox">You Win!</div>
-    <div class="msgBox newGameMsgBox">New Game Started!</div>
+    <div class="msgBox winMsgBox"> You Win! </div>
+    <div class="msgBox newGameMsgBox"> New Game Started! </div>
     
     <div class="allBoxes">
         <div id="boxes1">
