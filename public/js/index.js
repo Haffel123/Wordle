@@ -1,12 +1,9 @@
 let word_array = [];
 let word_set = new Set();
-let guess_word = "";
 let current_line_idx = 1;
 let current_box_idx = 0;
 let current_line;
 let current_box;
-let duplicates = {};
-let temp_duplicates = {};
 let color_mode = "dark";
 let switchColorBtnHover = null;
 let switchColorBtnActiveHover = null;
@@ -60,6 +57,10 @@ function initializeNewGame() {
         current_box_idx = 0;
         current_line = document.getElementById(`boxes${current_line_idx}`);
         current_box = current_line.children[current_box_idx];
+
+        socket.off("generateGuessWord");
+        socket.on("generateGuessWord");
+        socket.emit("generateGuessWord");
     
         for (i=0; i<5; i++) {
             if (color_mode == "dark") {
@@ -68,12 +69,6 @@ function initializeNewGame() {
                 current_line.children[i].style.borderColor = "#3a3a3c";
             };
         };
-    
-        const randomIndex = Math.floor(Math.random() * word_array.length);
-        guess_word = word_array[randomIndex].toUpperCase();
-    
-        getDuplicates();
-        temp_duplicates = {...duplicates};
     
         document.removeEventListener("keydown", handleKeyPress);
         document.addEventListener("keydown", handleKeyPress);
@@ -157,8 +152,8 @@ function switchColorModes() {
     };
 };
 
-function getDuplicates() {
-    duplicates = {};
+function getDuplicates(guess_word) {
+    let duplicates = {};
     for (let char of guess_word) {
         if (duplicates[char]) {
             duplicates[char]++;
@@ -166,6 +161,7 @@ function getDuplicates() {
             duplicates[char] = 1;
         };
     };
+    return duplicates;
 };
 
 function colorBoxes() {
@@ -173,111 +169,119 @@ function colorBoxes() {
         return;
     };
 
-    const totalAnimationTime = 1550;
     isAnimating = true;
-    let correct_boxes = [];
+    
+    socket.off("guessWord");
+    socket.on("guessWord", (guess_word) => {
+        const totalAnimationTime = 1550;
+        let correct_boxes = [];
+        let duplicates = getDuplicates(guess_word);
+        let temp_duplicates = {...duplicates};
 
-    for (let i=0; i < current_line.children.length; i++) {
-        let box = current_line.children[i];
-        let box_char = box.textContent;
-        let current_letter = guess_word.charAt(i);
+        for (let i=0; i < current_line.children.length; i++) {
+            let box = current_line.children[i];
+            let box_char = box.textContent;
+            let current_letter = guess_word.charAt(i);
 
-        if (box_char == current_letter) {
-            correct_boxes.push(box);
+            if (box_char == current_letter) {
+                correct_boxes.push(box);
 
-            if (temp_duplicates[box_char] != 0) {
-                temp_duplicates[box_char]--;
+                if (temp_duplicates[box_char] != 0) {
+                    temp_duplicates[box_char]--;
+                };
             };
+            console.log("🔹 DURING FOR LOOP: correct_boxes =", correct_boxes.length);
         };
-    };
 
-    for (let i=0; i < current_line.children.length; i++) {
-        let box = current_line.children[i];
-        let box_char = box.textContent;
-        let current_letter = guess_word.charAt(i);
+        console.log("🔹 AFTER FIRST LOOP: correct_boxes =", correct_boxes.length);
 
-        setTimeout(() => {
-            box.classList.remove("animateBoxRotate");
-            void box.offsetWidth;
-            box.classList.add("animateBoxRotate");
-            void box.offsetWidth;
+        for (let i=0; i < current_line.children.length; i++) {
+            let box = current_line.children[i];
+            let box_char = box.textContent;
+            let current_letter = guess_word.charAt(i);
 
             setTimeout(() => {
-                if (box_char != current_letter && guess_word.includes(box_char)) {
-                    if (temp_duplicates[box_char] > 0) {
-                        box.style.backgroundColor = "#b79b42";
-                        box.style.borderColor = "#b79b42";
-                        box.style.color = "#ffffff";
-                        temp_duplicates[box_char]--;
-                    } else {
+                box.classList.remove("animateBoxRotate");
+                void box.offsetWidth;
+                box.classList.add("animateBoxRotate");
+                void box.offsetWidth;
+
+                setTimeout(() => {
+                    if (box_char != current_letter && guess_word.includes(box_char)) {
+                        if (temp_duplicates[box_char] > 0) {
+                            box.style.backgroundColor = "#b79b42";
+                            box.style.borderColor = "#b79b42";
+                            box.style.color = "#ffffff";
+                            temp_duplicates[box_char]--;
+                        } else {
+                            changeBoxesColors(box);
+                        };
+                        
+                    } else if (box_char != current_letter) {
                         changeBoxesColors(box);
+
+                    } else if (box_char == current_letter) {
+                        box.style.backgroundColor = "#528c4f";
+                        box.style.borderColor = "#528c4f";
+                        box.style.color = "#ffffff";
                     };
-                    
-                } else if (box_char != current_letter) {
-                    changeBoxesColors(box);
-
-                } else if (box_char == current_letter) {
-                    box.style.backgroundColor = "#528c4f";
-                    box.style.borderColor = "#528c4f";
-                    box.style.color = "#ffffff";
-                    correct_boxes++;
-                };
-            }, 250);
-        }, i * 250);
-    };
-
-    function changeBoxesColors(box) {
-        if (color_mode == "dark") {
-            box.style.backgroundColor = "#3a3a3c";
-            box.style.borderColor = "#3a3a3c";
-            box.style.color = "#ffffff";
-        } else {
-            box.style.backgroundColor = "#787c7f";
-            box.style.borderColor = "#787c7f";
-            box.style.color = "#ffffff";
+                }, 250);
+            }, i * 250);
         };
-    };
 
-    setTimeout(() => {
-        isAnimating = false;
+        function changeBoxesColors(box) {
+            if (color_mode == "dark") {
+                box.style.backgroundColor = "#3a3a3c";
+                box.style.borderColor = "#3a3a3c";
+                box.style.color = "#ffffff";
+            } else {
+                box.style.backgroundColor = "#787c7f";
+                box.style.borderColor = "#787c7f";
+                box.style.color = "#ffffff";
+            };
+        };
+
+        setTimeout(() => {
+            isAnimating = false;
         
-        if (correct_boxes.length == 6) {
-            document.removeEventListener("keydown", handleKeyPress);
-            win_box = document.getElementsByClassName("winMsgBox")[0];
-            win_box.classList.remove("animateMsgBox");
-            void win_box.offsetWidth;
-            win_box.classList.add("animateMsgBox");
-            return;
+            if (correct_boxes.length == 6) {
+                document.removeEventListener("keydown", handleKeyPress);
+                win_box = document.getElementsByClassName("winMsgBox")[0];
+                win_box.classList.remove("animateMsgBox");
+                void win_box.offsetWidth;
+                win_box.classList.add("animateMsgBox");
+                return;
 
-        } else if (current_line_idx + 1 != 7) {
-            temp_duplicates = {...duplicates};
-            current_line_idx++;
-            current_line = document.getElementById(`boxes${current_line_idx}`);
-            current_box_idx = 0;
-            current_box = current_line.children[current_box_idx];
-            for (i=0; i<5; i++) {
-                if (color_mode == "dark") {
-                    current_line.children[i].style.borderColor = "#a5a7a8";
-                } else {
-                    current_line.children[i].style.borderColor = "#3a3a3c";
-                };
-            };
-
-        } else {
-            current_line_idx++;
-            try {
+            } else if (current_line_idx + 1 != 7) {
+                current_line_idx++;
                 current_line = document.getElementById(`boxes${current_line_idx}`);
-            } catch (err) {
+                current_box_idx = 0;
+                current_box = current_line.children[current_box_idx];
+                for (i=0; i<5; i++) {
+                    if (color_mode == "dark") {
+                        current_line.children[i].style.borderColor = "#a5a7a8";
+                    } else {
+                        current_line.children[i].style.borderColor = "#3a3a3c";
+                    };
+                };
+
+            } else {
+                current_line_idx++;
+                try {
+                    current_line = document.getElementById(`boxes${current_line_idx}`);
+                } catch (err) {
+                    
+                };
                 
+                lose_box = document.getElementsByClassName("loseMsgBox")[0];
+                lose_box.textContent = `You lose! The word was: ${guess_word}`;
+                lose_box.classList.remove("animateMsgBox");
+                void lose_box.offsetWidth;
+                lose_box.classList.add("animateMsgBox");
             };
-            
-            lose_box = document.getElementsByClassName("loseMsgBox")[0];
-            lose_box.textContent = `You lose! The word was: ${guess_word}`;
-            lose_box.classList.remove("animateMsgBox");
-            void lose_box.offsetWidth;
-            lose_box.classList.add("animateMsgBox");
-        };
-    }, totalAnimationTime);
+        }, totalAnimationTime);
+    });
+    socket.emit("getGuessWord");
 };
 
 function handleKeyPress(event) {
@@ -343,10 +347,8 @@ setBoardColor();
 getStyleSheet();
 loadWords();
 
+/*
 socket.on("updateScore", (players) => {
-    console.log(players[socket.id]["score"]);
+    console.log("score:", players[socket.id]["score"]);
 });
-
-socket.on("updateGuessWord", (players) => {
-    console.log(players[socket.id]["guess_word"])
-})
+*/

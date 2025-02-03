@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
-const players  = {}
+const players  = {};
 
 let word_set = new Set();
 
@@ -27,26 +27,42 @@ async function loadWords() {
         word_set = new Set(word_array);
     } catch (err) {
         console.error("Word file not found");
-    }
+    };
 };
 
-function getGuessWord() {
+function generateGuessWord() {
     const randomIndex = Math.floor(Math.random() * word_array.length);
     return guess_word = word_array[randomIndex].toUpperCase();
-}
+};
 
 io.on("connection", (socket) => {
     console.log("a user connected");
+    
     players[socket.id] = {
         score: 0,
-        guess_word: getGuessWord(),
+        guess_word: "",
     };
     
     // socket.emit if only needed for the player that joined
-    io.emit("updateScore", players);
+    // io.emit for all
+    socket.emit("updateScore", players);
     socket.emit("updateGuessWord", players);
 
-    console.log(players)
+    socket.on("getGuessWord", () => {
+        socket.emit("guessWord", guess_word);
+    });
+
+    socket.on("generateGuessWord", () => {
+        players[socket.id]["guess_word"] = generateGuessWord();
+        console.log(players[socket.id]["guess_word"])
+    });
+
+    socket.on("disconnect", () => {
+        console.log("A user disconnected:", socket.id);
+        delete players[socket.id];
+    });
+
+    console.log(players);
   });
 
   server.listen(port, async () => {
