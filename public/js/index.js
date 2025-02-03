@@ -100,6 +100,8 @@ function switchColorModes() {
     if (!isAnimating) {
         if (color_mode == "dark") {
             document.getElementsByClassName("switchColorBtn")[0].textContent = "Dark Mode";
+            document.getElementById("score").style.color = "black";
+            document.getElementById("highscore").style.color = "black";
             switchColorBtnHover.backgroundColor = "#000000";
             switchColorBtnActiveHover.backgroundColor = "#2b2b2b";
             document.body.style.backgroundColor = "#ffffff";
@@ -119,6 +121,8 @@ function switchColorModes() {
             color_mode = "light";
         } else {
             document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode";
+            document.getElementById("score").style.color = "white";
+            document.getElementById("highscore").style.color = "white";
             switchColorBtnHover.backgroundColor = "#ffd900";
             switchColorBtnActiveHover.backgroundColor = "#b69b04";
             document.body.style.backgroundColor = "#121213";
