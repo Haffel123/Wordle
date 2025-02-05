@@ -20,6 +20,7 @@ const players  = {};
 
 let word_array = [];
 let word_set = new Set();
+let highscore = 0;
 
 async function loadWords() {
     try {
@@ -36,6 +37,14 @@ function generateGuessWord() {
     return guess_word = word_array[randomIndex].toUpperCase();
 };
 
+function calcHighscore() {
+    if (players && Object.keys(players).length > 0) {
+        highscore = Math.max(...Object.values(players).map(player => player.score));
+    } else {
+        highscore = 0;
+    };
+}
+
 io.on("connection", (socket) => {
     console.log("a user connected");
     
@@ -46,7 +55,19 @@ io.on("connection", (socket) => {
     
     // socket.emit if only needed for the player that requested
     // io.emit for all
-    socket.emit("updateScore", players);
+
+    socket.on("updateScore", () => {
+        players[socket.id].score++;
+        socket.emit("updateScoreText", players[socket.id].score);
+        calcHighscore();
+        io.emit("updateHighscoreText", highscore);
+        console.log(players)
+    });
+
+    socket.on("getHighscore", () => {
+        calcHighscore();
+        io.emit("updateHighscoreText", highscore);
+    });
 
     socket.on("getGuessWord", () => {
         socket.emit("guessWord", players[socket.id].guess_word);
@@ -54,7 +75,6 @@ io.on("connection", (socket) => {
 
     socket.on("generateGuessWord", () => {
         players[socket.id].guess_word = generateGuessWord();
-        console.log(players)
         console.log(players[socket.id]["guess_word"])
     });
 

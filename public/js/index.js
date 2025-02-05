@@ -7,7 +7,7 @@ let current_box;
 let color_mode = "dark";
 let switchColorBtnHover = null;
 let switchColorBtnActiveHover = null;
-isAnimating = false;
+let isAnimating = false;
 const styleSheets = document.styleSheets;
 const socket = io();
 
@@ -194,10 +194,7 @@ function colorBoxes() {
                     temp_duplicates[box_char]--;
                 };
             };
-            console.log("🔹 DURING FOR LOOP: correct_boxes =", correct_boxes.length);
         };
-
-        console.log("🔹 AFTER FIRST LOOP: correct_boxes =", correct_boxes.length);
 
         for (let i=0; i < current_line.children.length; i++) {
             let box = current_line.children[i];
@@ -254,6 +251,7 @@ function colorBoxes() {
                 win_box.classList.remove("animateMsgBox");
                 void win_box.offsetWidth;
                 win_box.classList.add("animateMsgBox");
+                socket.emit("updateScore")
                 return;
 
             } else if (current_line_idx + 1 != 7) {
@@ -347,12 +345,18 @@ function getStyleSheet() {
     };
 };
 
+socket.on("updateScoreText", (score) => {
+    document.getElementById("score").textContent = `Score: ${score}`;
+});
+
+socket.on("updateHighscoreText", (highscore) => {
+    document.getElementById("highscore").textContent = `Top Score: ${highscore}`
+});
+
+socket.emit("getHighscore")
+
 setBoardColor();
 getStyleSheet();
 loadWords();
 
-/*
-socket.on("updateScore", (players) => {
-    console.log("score:", players[socket.id]["score"]);
-});
-*/
+
