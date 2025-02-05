@@ -52,8 +52,6 @@ function calcHighscore() {
 };
 
 io.on("connection", (socket) => {
-    console.log("a user connected");
-    
     players[socket.id] = {
         score: 0,
         guess_word: "",
@@ -65,7 +63,6 @@ io.on("connection", (socket) => {
 
     socket.on("receiveUsername", (user) => {
         players[socket.id].username = user;
-        console.log(players[socket.id].username)
     })
 
     socket.on("updateScore", () => {
@@ -96,11 +93,9 @@ io.on("connection", (socket) => {
 
     socket.on("generateGuessWord", () => {
         players[socket.id].guess_word = generateGuessWord();
-        console.log(players[socket.id]["guess_word"])
     });
 
     socket.on("disconnect", () => {
-        console.log("A user disconnected:", socket.id);
         delete players[socket.id];
     });
   });
