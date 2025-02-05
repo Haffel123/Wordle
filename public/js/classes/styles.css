@@ -24,6 +24,11 @@ Button {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+.highscore {
+    position: absolute;
+    right: 5px;
+}
+
 .newGameBtn {
     left: 25px;
 }
@@ -173,4 +178,89 @@ Button {
     25%, 75%{
         opacity: 0.9;
     }
+}
+
+.usernameScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: sans-serif;
+    z-index: 1000;
+}
+
+.wrongInput {
+    position: absolute;
+    top: 28%;
+    font-size: 25px;
+    background-color: #3d3d3d;
+    opacity: 0;
+    padding: 7px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px #555;
+}
+
+.animateWrongInputBox {
+    animation: animateWrongInput 4s ease-in-out ;
+}
+
+@keyframes animateWrongInput {
+    0%, 100% {
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+}
+
+.usernameBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.usernameInput {
+    width: 100%;
+    height: 50px;
+    font-family: sans-serif;
+    letter-spacing: 1.25px;
+    font-size: 25px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.usernameInput:focus {
+    outline: none;
+    box-shadow: 0 0 10px #555;
+}
+
+.startBtn {
+    all: revert;
+    outline: none;
+    background-color: #df2626;
+    border: none;
+    border-radius: 5px;
+    font-family: fantasy;
+    letter-spacing: 1.5px;
+    font-size: 25px;
+    width: 50%;
+    height: 35px;
+    color: #ffffff;
+}
+
+.startBtn:hover {
+    box-shadow: 0 0 7px #eb5a5a;
+}
+
+.startBtn:active {
+    box-shadow: 0 0 7px #eb5a5a;
+    background-color: #861414;
 }

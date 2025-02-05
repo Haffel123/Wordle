@@ -102,6 +102,7 @@ function switchColorModes() {
             document.getElementsByClassName("switchColorBtn")[0].textContent = "Dark Mode";
             document.getElementById("score").style.color = "black";
             document.getElementById("highscore").style.color = "black";
+            document.getElementById("username").style.color = "black";
             switchColorBtnHover.backgroundColor = "#000000";
             switchColorBtnActiveHover.backgroundColor = "#2b2b2b";
             document.body.style.backgroundColor = "#ffffff";
@@ -123,6 +124,7 @@ function switchColorModes() {
             document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode";
             document.getElementById("score").style.color = "white";
             document.getElementById("highscore").style.color = "white";
+            document.getElementById("username").style.color = "white";
             switchColorBtnHover.backgroundColor = "#ffd900";
             switchColorBtnActiveHover.backgroundColor = "#b69b04";
             document.body.style.backgroundColor = "#121213";
@@ -351,18 +353,56 @@ function getStyleSheet() {
     };
 };
 
-socket.on("updateScoreText", (score) => {
-    document.getElementById("score").textContent = `Score: ${score}`;
+function getScore() {
+    socket.on("updateScoreText", (score) => {
+        document.getElementById("score").textContent = `Score: ${score}`;
+    });
+    
+    socket.on("updateHighscoreText", (highscore, user) => {
+        document.getElementById("highscore").textContent = `Top Score: ${highscore} (${user})`;
+    });
+    
+    socket.emit("getHighscore");
+};
+
+document.getElementById("startBtn").addEventListener("click", () => {
+    let username = document.getElementById("usernameInput").value;
+    let wrong_input_msg_box;
+
+    if (username === "") {
+        wrong_input_msg_box = document.getElementsByClassName("wrongInput")[1];
+        wrong_input_msg_box.classList.remove("animateWrongInputBox");
+        void wrong_input_msg_box.offsetWidth;
+        wrong_input_msg_box.classList.add("animateWrongInputBox");
+    
+    } else if (username.length > 8) {
+        wrong_input_msg_box = document.getElementsByClassName("wrongInput")[0]
+        wrong_input_msg_box.classList.remove("animateWrongInputBox");
+        void wrong_input_msg_box.offsetWidth;
+        wrong_input_msg_box.classList.add("animateWrongInputBox");
+
+    } else {
+        socket.on("checkDuplicateUserAns", (ans) => {
+            if (ans) {
+                wrong_input_msg_box = document.getElementsByClassName("wrongInput")[2]
+                wrong_input_msg_box.classList.remove("animateWrongInputBox");
+                void wrong_input_msg_box.offsetWidth;
+                wrong_input_msg_box.classList.add("animateWrongInputBox");
+            } else {
+                socket.emit("receiveUsername", username)
+                document.getElementById("usernameScreen").style.display = "none";
+                document.getElementById("username").textContent = `Username: ${username}`;
+                loadWords();
+            }
+        });
+        socket.emit("checkDuplicateUser", username)
+    }
 });
 
-socket.on("updateHighscoreText", (highscore) => {
-    document.getElementById("highscore").textContent = `Top Score: ${highscore}`
-});
-
-socket.emit("getHighscore")
-
-setBoardColor();
 getStyleSheet();
-loadWords();
+setBoardColor();
+getScore()
 
-
+document.getElementsByClassName("switchColorBtn")[0].textContent = "Light Mode";
+switchColorBtnHover.backgroundColor = "#ffd900";
+switchColorBtnActiveHover.backgroundColor = "#b69b04";
