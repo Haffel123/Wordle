@@ -145,9 +145,15 @@ function switchColorModes() {
         try {
             for (i=0; i<5; i++) {
                 if (color_mode == "dark") {
-                    current_line.children[i].style.borderColor = "#a5a7a8";
+                    if (current_line.children[i].style.borderColor != "rgb(82, 140, 79)" 
+                        && current_line.children[i].style.borderColor != "rgb(183, 155, 66)") {
+                            current_line.children[i].style.borderColor = "#a5a7a8";
+                    };
                 } else {
-                    current_line.children[i].style.borderColor = "#3a3a3c";
+                    if (current_line.children[i].style.borderColor != "rgb(82, 140, 79)" 
+                        && current_line.children[i].style.borderColor != "rgb(183, 155, 66)") {
+                            current_line.children[i].style.borderColor = "#3a3a3c";
+                        };
                 };
             };
         } catch (err) {
